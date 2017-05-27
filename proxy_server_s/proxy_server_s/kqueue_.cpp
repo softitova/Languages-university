@@ -52,13 +52,12 @@ int kqueue_::occured() {
 
 
 void kqueue_::execute() {
-    int amount = kevent(kq.get_fd(), nullptr, 0, event_list, EVLIST_SIZE, nullptr);
-    
-    if (amount == -1) {
-        perror("getting events amount error\n");
+    int amount;
+    if ((amount = kevent(kq.get_fd(), nullptr, 0, event_list, EVLIST_SIZE, nullptr)) == -1) {
+        perror("getting events amount\n");
     }
     
-    invalid.clear();
+    inv_events.clear();
     
     for (int i = 0; i < amount; ++i) {
         //bool is_valid = invalid.find(event_list[i].ident) == invalid.end();
@@ -73,7 +72,7 @@ void kqueue_::execute() {
 }
 
 void kqueue_::invalidate_events(uintptr_t id) {
-    invalid.insert(id);
+    inv_events.insert(id);
 }
 
 kqueue_::~kqueue_() {}

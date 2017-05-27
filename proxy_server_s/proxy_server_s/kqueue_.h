@@ -34,7 +34,7 @@ private:
     static const uint16_t EVLIST_SIZE = 1024;
     file_descriptor kq;
     struct kevent event_list[EVLIST_SIZE];
-    std::set<uintptr_t> invalid;
+    std::set<uintptr_t> inv_events;
     std::map<std::pair<uintptr_t, int16_t>, std::function<void(struct kevent&)> > event_handlers;
 };
 

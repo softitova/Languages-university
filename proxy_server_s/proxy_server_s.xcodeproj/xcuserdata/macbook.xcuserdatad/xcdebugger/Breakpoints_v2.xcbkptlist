@@ -26,26 +26,26 @@
                   moduleName = "proxy_server_s"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/proxy.cpp"
-                  timestampString = "517568141.45639"
+                  timestampString = "517606211.581139"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
+                  startingLineNumber = "239"
+                  endingLineNumber = "239"
                   offsetFromSymbolStart = "562">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "proxy_server::write_to_server(kevent&amp;)::$_12::operator()(kevent&amp;) const"
+                  symbolName = "proxy_server::write_to_server(kevent&amp;)::$_13::operator()(kevent&amp;) const"
                   moduleName = "proxy_server_s"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/proxy.cpp"
-                  timestampString = "517568141.456948"
+                  timestampString = "517606211.581301"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
+                  startingLineNumber = "239"
+                  endingLineNumber = "239"
                   offsetFromSymbolStart = "23">
                </Location>
             </Locations>
@@ -90,26 +90,26 @@
                   moduleName = "proxy_server_s"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/proxy.cpp"
-                  timestampString = "517568186.41766"
+                  timestampString = "517606211.583196"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "240"
-                  endingLineNumber = "240"
+                  startingLineNumber = "241"
+                  endingLineNumber = "241"
                   offsetFromSymbolStart = "748">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "proxy_server::write_to_server(kevent&amp;)::$_13::operator()(kevent&amp;) const"
+                  symbolName = "proxy_server::write_to_server(kevent&amp;)::$_14::operator()(kevent&amp;) const"
                   moduleName = "proxy_server_s"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/proxy.cpp"
-                  timestampString = "517568186.41813"
+                  timestampString = "517606211.58335"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "240"
-                  endingLineNumber = "240"
+                  startingLineNumber = "241"
+                  endingLineNumber = "241"
                   offsetFromSymbolStart = "23">
                </Location>
             </Locations>
@@ -128,6 +128,22 @@
             startingLineNumber = "289"
             endingLineNumber = "289"
             landmarkName = "proxy_server::on_host_resolved(struct kevent&amp; event)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "proxy_server_s/sockets.cpp"
+            timestampString = "517606211.498482"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
+            landmarkName = "client::write()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

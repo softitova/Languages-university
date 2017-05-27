@@ -179,11 +179,6 @@ void client::append(std::string& str)
     text.append(str);
 }
 
-bool client::has_capcacity() const
-{
-    return text.size() < BUFFER_SIZE;
-}
-
 size_t client::read(size_t size)
 {
     try
@@ -198,10 +193,10 @@ size_t client::read(size_t size)
 
 size_t client::write()
 {
+    size_t length = socket.write(text);
+    text.erase(text.begin(), text.begin() + length);
     try
     {
-        size_t length = socket.write(text);
-        text.erase(text.begin(), text.begin() + length);
         if (server)
         {
             get_message();
@@ -272,7 +267,7 @@ bool server::text_empty() const
 std::string server::read(size_t size)
 {
     try {
-        return client->has_capcacity() ? text.append({socket.read(size)}) :"";
+        return (text.size() < BUFFER_SIZE) ? text.append({socket.read(size)}) :"";
     } catch (...) {
         return "";
     }

@@ -72,8 +72,6 @@ struct client {
     void append(std::string&);
     std::string& get_text();
     size_t get_text_size() const;
-   
-    bool has_capcacity() const;
     
     size_t read(size_t);
     size_t write();
