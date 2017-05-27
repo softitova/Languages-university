@@ -1,0 +1,5 @@
+project(echo_server)
+set(SOURCES main.cpp kqueue_.cpp echo.cpp socket.cpp timeout.cpp)
+set(HEADERS kqueue_.h exception_.h echo.h socket.h timeout.h)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14  -stdlib=libc++")
+add_executable(main ${HEADERS} ${SOURCES})
