@@ -181,7 +181,7 @@ void proxy_server::read_from_client(struct kevent& event) {
 
 void proxy_server::read_header_from_server(struct kevent& event) {
     std::cout<<"HEHEHEHHEHHE\n";
-    //if(!check_event(event, [this](struct kevent& ev) { this->disconnect_server(ev);})) return;
+    if(!check_event(event, [this](struct kevent& ev) { this->disconnect_server(ev);})) return;
     std::cout<<"read header from server: " << event.ident << "\n";
     struct server* server = servers.at(event.ident);
 
