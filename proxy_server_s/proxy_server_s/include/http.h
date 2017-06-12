@@ -7,7 +7,6 @@ enum STATE {BAD, FULL, PROGRESS, DEF};
 
 struct http_request
 {
-    
     http_request(std::string);
     http_request(http_request &&);
     ~http_request();

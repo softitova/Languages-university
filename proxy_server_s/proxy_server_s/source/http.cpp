@@ -1,6 +1,5 @@
 #include "http.h"
 
-
 static const std::string dCRLF = "\r\n\r\n";
 static const std::string CRLF = "\r\n";
 
