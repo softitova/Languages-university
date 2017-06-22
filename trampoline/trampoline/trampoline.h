@@ -6,6 +6,14 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
+
+
+// TODO: memory alloc and reusing
+// pointers
+// assembler commands...
+// swap/ operator=() etc..
+
+
 template <typename ... Args>
 struct args_types;
 
@@ -251,7 +259,6 @@ public:
             /* FINALLY RETURN */
             add(pcode,"\xc3");
         }
-    
     }
     
     template <typename F>
@@ -259,17 +266,12 @@ public:
         return (*(F*)obj)(args...);
     }
     
-    T (*get() const)(Args ... args)
-    {
+    T (*get() const)(Args ... args) {
         return (T(*)(Args ... args))code;
     }
     
-    ~trampoline()
-    {
-        if (func_obj)
-        {
-            deleter(func_obj);
-        }
+    ~trampoline() {
+        if (func_obj) deleter(func_obj);
         free_ptr(code);
     }
     
@@ -279,11 +281,11 @@ private:
     void (*deleter)(void*);
     
     template <typename F>
-    static void my_deleter(void* func_obj)
-    {
+    static void my_deleter(void* func_obj) {
         delete static_cast<F*>(func_obj);
     }
 };
+
 #endif
 
 

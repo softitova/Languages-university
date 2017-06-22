@@ -139,9 +139,23 @@ void test_multipal_types_more_five_args() {
         assert ((float)(p1(1, 1, 1, 1, 1, 1, 1, 1) + 103.8) == p2(1, 2, 100, -1, a, b, 1, c));
         cout << " int/double/float test completed"  << endl;
     }
-    
+    {
+        trampoline<float (double, int, float, int, int, double, double, float)>
+        t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
+           {return p2;});
+        auto p = t.get();
+        assert(p(1, 2, 3, 4, 5, 6, 7, 8) == 3);
+        cout<<" parms sequence test completed" << endl;
+    }
+    {
+        trampoline<int (double, int, float, int, int, double, double, float)>
+        t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
+           {return p7;});
+        auto p = t.get();
+        assert(p(1, 2, 3, 4, 5, 6, 7, 8.8) == 8);
+        cout<<" return parm test completed" << endl;
+    }
     cout << "Test 3 PASSED" << endl << endl;
-
 }
 
 int main()
