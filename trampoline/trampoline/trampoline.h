@@ -9,7 +9,6 @@
 
 
 // TODO: memory alloc and reusing
-// pointers
 // assembler commands...
 // swap/ operator=() etc..
 
@@ -66,7 +65,7 @@ namespace
                          MAP_PRIVATE | MAP_ANONYMOUS,
                          -1, 0);
         p = (void**) mem;
-        if (mem != nullptr) {
+        if (mem != nullptr) { // man mem
             for (auto i = 0; i < PAGE_SIZE * PAGES_AMOUNT; i += SIZE) {
                 auto tmp = (char*)mem + i;
                 *(void**)tmp = 0;
@@ -77,6 +76,7 @@ namespace
 
     void* malloc_ptr() {
         if (p == nullptr) {
+            std::cout << "in alloc" << std::endl;
             alloc();
             if (p == nullptr) return nullptr;
         }
@@ -105,7 +105,7 @@ template <typename T, typename ... Args>
 struct trampoline<T (Args ...)>
 {
 private:
-    const char* operations[6] = {
+    const char* shifts[6] = {
         "\x48\x89\xfe" /*mov rsi rdi*/,
         "\x48\x89\xf2" /*mov rdx rsi*/,
         "\x48\x89\xd1" /*mov rcx rdx*/,
@@ -130,7 +130,7 @@ public:
         if (args_types<Args ...>::INTEGER < 6)
         {
             /* shift each param for the next free register */
-            for (int i = args_types<Args ...>::INTEGER - 1; i >= 0; i--) add(pcode, operations[i]);
+            for (int i = args_types<Args ...>::INTEGER - 1; i >= 0; i--) add(pcode, shifts[i]);
             /*  move executing function ptr to the first register */
             add(pcode,"\x48\xbf");
             *(void**)pcode = func_obj;
@@ -152,11 +152,11 @@ public:
 
             // push 6'th argument to stack, shift other arguments\
             rdi is free now
-            for (int i = 5 ; i >= 0; i--) add(pcode, operations[i]);
+            for (int i = 5 ; i >= 0; i--) add(pcode, shifts[i]);
             
-            // 5 INTEGER args in r[9,8], rsi, rdi, rdx, 1 on stack, 8 SSE args in xmm[0..7]\
+            // 5 INTEGER args in r[9,8], rsi, rcx, rdx, 1 on stack, <= 8 SSE args in xmm[0..7]\
             stack_size - amount of arguments to place on stack
-            int stack_size = 8 * (args_types<Args ...>::INTEGER - 6 + std::max(args_types<Args ...>::SSE - 8, 0)) + 8;
+            int stack_size = 8 * (args_types<Args ...>::INTEGER - 5 + std::max(args_types<Args ...>::SSE - 8, 0));
             
             
             /*--------------- shifting arguments --------------*/
@@ -166,12 +166,13 @@ public:
             add(pcode, "\x48\x89\xe0");
             
             // set rax onto the zero argument on stack\
-            add rax, stack_size + 8
+            add rax, stack_size
             add(pcode,"\x48\x05");
             *(int32_t*)pcode = stack_size;
             pcode += 4;
             
-            // shift rsp to free place to provide shifting of args on stack using rsp
+            // shift rsp (+8), to provide shifting of args on stack using rsp\
+            add rsp, 8
             add(pcode,"\x48\x81\xc4");
             *(int32_t*)pcode = 8;
             pcode += 4;
@@ -220,17 +221,19 @@ public:
             add(pcode, "\x4c\x89\x1c\x24");
           
             //update rsp\
-            sub rsp,...
+            sub rsp, stack_size
             add(pcode,"\x48\x81\xec");
             *(int32_t*)pcode = stack_size;
             pcode += 4;
             
-            /*  move executing function ptr to the first register */
+            // move executing function ptr to the first register\
+            mov rdi, imm
             add(pcode,"\x48\xbf");
             *(void**)pcode = func_obj;
             pcode += 8;
             
-            /* set ret function ptr */
+            // set ret function ptr\
+            mov rax, imm
             add(pcode, "\x48\xb8");
             *(void**)pcode = (void*)&do_call<F>;
             pcode += 8;
@@ -239,7 +242,8 @@ public:
             call rax
             add(pcode,"\xff\xd0");
 
-            // removing 6'th arg from stack
+            // removing 6'th arg from stack\
+            pop r9
             add(pcode,"\x41\x59");
          
             /* updating rsp */
@@ -263,7 +267,7 @@ public:
     
     template <typename F>
     static T do_call(void* obj, Args ...args) {
-        return (*(F*)obj)(args...);
+        return  (*static_cast<F*>(obj))(std::forward<Args>(args)...);
     }
     
     T (*get() const)(Args ... args) {

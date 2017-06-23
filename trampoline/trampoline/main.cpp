@@ -13,7 +13,7 @@
 using namespace std;
 
 struct test_struct_1 {
-    int operator()(int c1, int c2, int c3, int c4, int c5) {
+    int operator()(int p1, int p2, int p3, int p4, int p5) {
         return 123;
     }
 };
@@ -24,12 +24,23 @@ void test_base() {
     trampoline<int (int, int, int, int, int)> tr(tmp);
     auto p = tr.get();
     assert (123 == p(1, 1, 1, 1, 1));
+    cout << "Test 0 PASSED" << endl << endl;
+}
+
+
+void test_ptr() {
+    cout << "Test 1 started" << endl;
+    std::function<char*(int *)> fun = [](int *){return std::make_shared<char>('a').get();};
+    trampoline<char*(int*)> tr(fun);
+    auto p = tr.get();
+    assert ('a' == *p(nullptr));
     cout << "Test 1 PASSED" << endl << endl;
 }
 
+
 void test_multipal_types_less_six_args() {
     
-    cout << "Test 1 started" << endl;
+    cout << "Test 2 started" << endl;
     
     {
         trampoline<int (int, int, int, int, int)>
@@ -69,11 +80,11 @@ void test_multipal_types_less_six_args() {
         assert (1 == p(a));
         cout << " & test completed"  << endl;
     }
-    cout << "Test 1 PASSED" << endl << endl;
+    cout << "Test 2 PASSED" << endl << endl;
 }
 
 void test_multipal_types_more_five_args_simple() {
-    cout << "Test 2 started" << endl;
+    cout << "Test 3 started" << endl;
     {
         trampoline<long long (int, int, int, int, int, int, int, int)>
         t([&] (int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7)
@@ -118,11 +129,11 @@ void test_multipal_types_more_five_args_simple() {
         assert (8 == p(a, b, c, 1, 1, 1, 1, d));
         cout << " &/int/double/float test completed"  << endl;
     }
-    cout << "Test 2 PASSED" << endl << endl;
+    cout << "Test 3 PASSED" << endl << endl;
 }
 
 void test_multipal_types_more_five_args() {
-    cout << "Test 3 started" << endl;
+    cout << "Test 4 started" << endl;
     {
         trampoline<float (double, int, float, int, int, double, double, float)>
         t1([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
@@ -152,15 +163,20 @@ void test_multipal_types_more_five_args() {
         t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
            {return p7;});
         auto p = t.get();
+        p(2, 3, 4, 5, 6, 7, 8, 9);
         assert(p(1, 2, 3, 4, 5, 6, 7, 8.8) == 8);
         cout<<" return parm test completed" << endl;
     }
-    cout << "Test 3 PASSED" << endl << endl;
+    {
+        
+    }
+    cout << "Test 4 PASSED" << endl << endl;
 }
 
 int main()
 {
     test_base();
+    test_ptr();
     test_multipal_types_less_six_args();
     test_multipal_types_more_five_args_simple();
     test_multipal_types_more_five_args();
