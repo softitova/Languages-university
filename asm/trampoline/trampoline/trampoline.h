@@ -5,15 +5,6 @@
 #include <sys/mman.h>
 #include <xmmintrin.h>
 
-
-
-
-
-// TODO:
-// swap/ operator=() etc..
-
-
-
 template <typename ... Args>
 struct args_types;
 
@@ -63,9 +54,9 @@ namespace
         p = (void**) mem;
         
         for (auto i = 0; i < PAGE_SIZE * PAGES_AMOUNT; i += SIZE) {
-            auto tmp = (char*)mem + i;
-            *(void**)tmp = 0;
-            if (i != 0) *(void**)(tmp - SIZE) = tmp;
+            auto с = (char*)mem + i;
+            *(void**)с = 0;
+            if (i != 0) *(void**)(с - SIZE) = с;
         }
         
     }
@@ -93,12 +84,6 @@ struct trampoline;
 
 template<typename R, typename... Args>
 void swap(trampoline<R(Args...)>& lhs, trampoline<R(Args...)>& rhs);
-//{
-//    template <typename F>
-//    trampoline(F func) {}
-//    trampoline(const trampoline&) = delete;
-//    T* get() const;
-//};
 
 template <typename T, typename ... Args>
 struct trampoline<T (Args ...)> {
@@ -155,7 +140,9 @@ public:
             /*--------------- shifting arguments --------------*/
             {
                 /* rax on the top of the current stack
-                mov rax,rsp */
+                mov rax,rsp 
+                rax on the bottom
+                add rax, stack_size */
                 add(pcode, "\x48\x89\xe0\x48\x05");
                 *(int32_t*)pcode = stack_size;
                 pcode += 4;
