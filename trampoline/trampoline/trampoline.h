@@ -112,7 +112,7 @@ private:
         "\x48\x89\xd1" /*mov rcx rdx*/,
         "\x49\x89\xc8" /*mov r8 rcx;*/,
         "\x4d\x89\xc1" /*mov r9 r8;*/,
-        "\x41\x51" /*push %%r9;*/
+        "\x41\x51" /*push r9;*/
     };
     
     void add(char* &p, const char* command) {
