@@ -6,36 +6,36 @@
 #include <xmmintrin.h>
 
 template <typename ... Args>
-struct args_types;
+struct args_t;
 
 template <>
-struct args_types<> {
+struct args_t<> {
     static const int INT_PTR = 0;
     static const int SSE = 0;
 };
 
 template <typename First, typename ... Args>
-struct args_types<First, Args ...> {
-    static const int INT_PTR = args_types<Args ...>::INT_PTR + 1;
-    static const int SSE = args_types<Args ...>::SSE;
+struct args_t<First, Args ...> {
+    static const int INT_PTR = args_t<Args ...>::INT_PTR + 1;
+    static const int SSE = args_t<Args ...>::SSE;
 };
 
 template <typename ... Args>
-struct args_types<double, Args ...> {
-    static const int INT_PTR = args_types<Args ...>::INT_PTR;
-    static const int SSE = args_types<Args ...>::SSE + 1;
+struct args_t<double, Args ...> {
+    static const int INT_PTR = args_t<Args ...>::INT_PTR;
+    static const int SSE = args_t<Args ...>::SSE + 1;
 };
 
 template <typename ... Args>
-struct args_types<float, Args ...> {
-    static const int INT_PTR = args_types<Args ...>::INT_PTR;
-    static const int SSE = args_types<Args ...>::SSE + 1;
+struct args_t<float, Args ...> {
+    static const int INT_PTR = args_t<Args ...>::INT_PTR;
+    static const int SSE = args_t<Args ...>::SSE + 1;
 };
 
 template <typename ... Args>
-struct args_types<__m64, Args ...> {
-    static const int INT_PTR = args_types<Args ...>::INT_PTR;
-    static const int SSE = args_types<Args ...>::SSE + 1;
+struct args_t<__m64, Args ...> {
+    static const int INT_PTR = args_t<Args ...>::INT_PTR;
+    static const int SSE = args_t<Args ...>::SSE + 1;
 };
 
 
@@ -109,11 +109,11 @@ public:
         code = get_next();
         char* pcode = (char*)code;
         
-        if (args_types<Args ...>::INT_PTR < 6)
+        if (args_t<Args ...>::INT_PTR < 6)
         {
             /* shift each param to the next free register */
             
-            for (int i = args_types<Args ...>::INT_PTR - 1; i >= 0; i--) add(pcode, shifts[i]);
+            for (int i = args_t<Args ...>::INT_PTR - 1; i >= 0; i--) add(pcode, shifts[i]);
             add(pcode,"\x48\xbf");
             *(void**)pcode = func_obj;
             pcode += 8;
@@ -128,7 +128,7 @@ public:
             
             /* 5 INTEGER args in r[9,8], rsi, rcx, rdx, 1 will be on stack later, <= 8 SSE args in xmm[0..7]\
             stack_size - amount of arguments to place on stack */
-            int stack_size = 8 * (args_types<Args ...>::INT_PTR - 5 + std::max(args_types<Args ...>::SSE - 8, 0));
+            int stack_size = 8 * (args_t<Args ...>::INT_PTR - 5 + std::max(args_t<Args ...>::SSE - 8, 0));
             
             /* save into r11 previous top of stack adress to return it after executing do_call
             move r11 [rsp] */
