@@ -1,0 +1,3 @@
+/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build_temp/CMakeFiles/rebuild_cache.dir
+/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build_temp/CMakeFiles/edit_cache.dir
+/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build_temp/CMakeFiles/server_run.dir
