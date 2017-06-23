@@ -202,9 +202,7 @@ void test_multipal_types_more_five_args() {
             .append(*c4)
             .append(*c5)
             .append(*c6)
-            .append(c7)
-            .append(*c8)
-            .append(c9).size();};
+            .append(c7).append(*c8).append(c9).size();};
         std::string sample = "abcababbaa";
         char const *sp = sample.c_str();
         std::vector<std::string> v;
@@ -224,10 +222,10 @@ void test_multipal_types_more_five_args() {
 
 int main()
 {
-//    test_base();
-//    test_ptr_base();
-//    test_multipal_types_less_six_args();
-//    test_multipal_types_more_five_args_simple();
+    test_base();
+    test_ptr_base();
+    test_multipal_types_less_six_args();
+    test_multipal_types_more_five_args_simple();
     test_multipal_types_more_five_args();
     return 0;
 }
