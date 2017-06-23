@@ -28,6 +28,7 @@ void test_base() {
 }
 
 
+
 void test_ptr() {
     cout << "Test 1 started" << endl;
     std::function<char*(int *)> fun = [](int *){return std::make_shared<char>('a').get();};
