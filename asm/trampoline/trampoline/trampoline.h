@@ -89,13 +89,16 @@ namespace
 
 
 template <typename T>
-struct trampoline
-{
-    template <typename F>
-    trampoline(F func) {}
-    trampoline(const trampoline&) = delete;
-    T* get() const;
-};
+struct trampoline;
+
+template<typename R, typename... Args>
+void swap(trampoline<R(Args...)>& lhs, trampoline<R(Args...)>& rhs);
+//{
+//    template <typename F>
+//    trampoline(F func) {}
+//    trampoline(const trampoline&) = delete;
+//    T* get() const;
+//};
 
 template <typename T, typename ... Args>
 struct trampoline<T (Args ...)> {
@@ -171,7 +174,6 @@ public:
                 cmp rax,rsp
                 if all arguments have been already shifted go to label_2
                 je */
-        
                 add(pcode,"\x48\x39\xe0\x74");
                 char* label_2 = pcode;
                 pcode++;
@@ -237,14 +239,31 @@ public:
         }
     }
     
-    template <typename F>
-    static T do_call(void* obj, Args ...args) {
-        return  (*static_cast<F*>(obj))(std::forward<Args>(args)...);
+    trampoline(trampoline&& other) {
+        func_obj = other.func_obj;
+        code = other.code;
+        deleter = other.deleter;
+        other.func_obj = nullptr;
+    }
+    
+    trampoline(const trampoline&) = delete;
+    
+    template <class TR>
+    trampoline& operator=(TR&& func) {
+        trampoline tmp(std::move(func));
+        ::swap(*this, tmp);
+        return *this;
     }
     
     T (*get() const)(Args ... args) {
         return (T(*)(Args ... args))code;
     }
+    
+    void swap(trampoline &other) {
+        ::swap(*this, other);
+    }
+    
+    friend void ::swap<>(trampoline& a, trampoline& b);
     
     ~trampoline() {
         if (func_obj) deleter(func_obj);
@@ -252,6 +271,11 @@ public:
     }
     
 private:
+    
+    template <typename F>
+    static T do_call(void* obj, Args ...args) {
+        return  (*static_cast<F*>(obj))(std::forward<Args>(args)...);
+    }
     
     void* func_obj;
     void* code;
@@ -262,6 +286,13 @@ private:
         delete static_cast<F*>(func_obj);
     }
 };
+
+template<typename R, typename... Args>
+void swap(trampoline<R(Args...)>& lhs, trampoline<R(Args...)>& rhs) {
+    std::swap(lhs.func_obj, rhs.func_obj);
+    std::swap(lhs.code, rhs.code);
+    std::swap(lhs.deleter, rhs.deleter);
+}
 
 #endif
 

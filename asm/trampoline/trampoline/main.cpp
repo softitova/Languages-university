@@ -18,7 +18,7 @@ struct test_struct_1 {
     }
 };
 
-void test_base() {
+void reg_base_test() {
     std::cout << "Test 0 started" << std::endl;
     
     test_struct_1 tmp;
@@ -31,7 +31,7 @@ void test_base() {
 
 
 
-void test_ptr_base() {
+void reg_ptr_test() {
     std::cout << "Test 1 started" << std::endl;
     
     std::function<char*(int *)> fun = [](int *){return std::make_shared<char>('a').get();};
@@ -43,7 +43,7 @@ void test_ptr_base() {
 }
 
 
-void test_multipal_types_less_six_args() {
+void reg_hard_test() {
     
     std::cout << "Test 2 started" << std::endl;
     
@@ -94,7 +94,7 @@ void test_multipal_types_less_six_args() {
     std::cout << "Test 2 PASSED" << std::endl << std::endl;
 }
 
-void test_multipal_types_more_five_args_simple() {
+void stack_base_test() {
     
     std::cout << "Test 3 started" << std::endl;
     
@@ -151,24 +151,24 @@ void test_multipal_types_more_five_args_simple() {
     std::cout << "Test 3 PASSED" << std::endl << std::endl;
 }
 
-void test_multipal_types_more_five_args() {
+void stack_hard_test() {
     
     std::cout << "Test 4 started" << std::endl;
     
     {
         trampoline<float (double, int, float, int, int, double, double, float)>
-        t1([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
+        t0([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
-        auto p1 = t1.get();
+        auto p0 = t0.get();
         
         trampoline<float (double, int, float, int, const int&, double&, double, float&)>
-        t2([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
+        t1([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
            {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         const int a = 1;
         double b = 3.7;
         float c = 4.1;
-        auto p2 = t2.get();
-        assert ((float)(p1(1, 1, 1, 1, 1, 1, 1, 1) + 103.8) == p2(1, 2, 100, -1, a, b, 1, c));
+        auto p1 = t1.get();
+        assert ((float)(p0(1, 1, 1, 1, 1, 1, 1, 1) + 103.8) == p1(1, 2, 100, -1, a, b, 1, c));
         
         std::cout << " int/double/float test completed"  << std::endl;
     }
@@ -220,13 +220,30 @@ void test_multipal_types_more_five_args() {
     std::cout << "Test 4 PASSED" << std::endl << std::endl;
 }
 
+void methods_test () {
+    
+    std::cout << "Test 5 started" << std::endl;
+    {
+        trampoline<int(int, int)> t0 = [&] (int p0, int p1) {return p0 + p1;};
+        assert (2 == t0.get()(1, 1));
+        trampoline<int(int,int)> t1(std::move(t0));
+        assert (2 == t1.get()(1, 1));
+        trampoline<int(int, int, int)> t2 = [&] (int p0, int p1, int p2) {return p0 + p1 + p2;};
+        assert(t2.get()(1, 1, 1) == t1.get()(1, 2));
+    }
+
+    
+    std::cout << "Test 5 PASSED" << std::endl << std::endl;
+}
+
 int main()
 {
-    test_base();
-    test_ptr_base();
-    test_multipal_types_less_six_args();
-    test_multipal_types_more_five_args_simple();
-    test_multipal_types_more_five_args();
+    reg_base_test();
+    reg_ptr_test();
+    reg_hard_test();
+    stack_base_test();
+    stack_hard_test();
+    methods_test();
     return 0;
 }
 
