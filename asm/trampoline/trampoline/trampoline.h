@@ -51,7 +51,7 @@ struct args_types<__m64, Args ...> {
 namespace
 {
     void** p = nullptr;
-    const int SIZE = 4096;
+    const int SIZE = 123;
     const int PAGES_AMOUNT = 1;
     const int PAGE_SIZE = 4096;
     
@@ -61,16 +61,16 @@ namespace
                          MAP_PRIVATE | MAP_ANONYMOUS,
                          -1, 0);
         p = (void**) mem;
-        if (mem != nullptr) { // man mem
-            for (auto i = 0; i < PAGE_SIZE * PAGES_AMOUNT; i += SIZE) {
-                auto tmp = (char*)mem + i;
-                *(void**)tmp = 0;
-                if (i != 0) *(void**)(tmp - SIZE) = tmp;
-            }
+        
+        for (auto i = 0; i < PAGE_SIZE * PAGES_AMOUNT; i += SIZE) {
+            auto tmp = (char*)mem + i;
+            *(void**)tmp = 0;
+            if (i != 0) *(void**)(tmp - SIZE) = tmp;
         }
+        
     }
 
-    void* malloc_ptr() {
+    void* get_next() {
         if (p == nullptr) {
             std::cout << "in alloc" << std::endl;
             alloc();
@@ -121,7 +121,7 @@ public:
     
     template <typename F>
     trampoline(F func) : func_obj(new F(std::move(func))), deleter(my_deleter<F>) {
-        code = malloc_ptr();
+        code = get_next();
         char* pcode = (char*)code;
         
         if (args_types<Args ...>::INT_PTR < 6)

@@ -48,7 +48,7 @@ void reg_hard_test() {
     std::cout << "Test 2 started" << std::endl;
     
     {
-        trampoline<int (int, int, int, int, int)>
+        trampoline <int (int, int, int, int, int)>
         t([&] (int p0, int p1, int p2, int p3, int p4) {return p1 + p2 + p3 + p4 + p0;});
         auto p = t.get();
         assert (5 == p(1, 1, 1, 1, 1));
@@ -56,7 +56,7 @@ void reg_hard_test() {
         std::cout << " int test completed"  << std::endl;
     }
     {
-        trampoline<double (double, double, double, double, double)>
+        trampoline <double (double, double, double, double, double)>
         t([&] (double p0, double p1, double p2, double p3, double p4) {return p1 + p2 + p3 + p4 + p0;});
         auto p = t.get();
         assert (5.2 == p(1.0, 1.2, 1, 1, 1));
@@ -64,7 +64,7 @@ void reg_hard_test() {
         std::cout << " double test completed"  << std::endl;
     }
     {
-        trampoline<float (float, float, float, float, float)>
+        trampoline <float (float, float, float, float, float)>
         t([&] (float p0, float p1, float p2, float p3, float p4) {return p1 + p2 + p3 + p4 + p0;});
         auto p = t.get();
         float res = 5.2;
@@ -73,7 +73,7 @@ void reg_hard_test() {
         std::cout << " float test completed"  << std::endl;
     }
     {
-        trampoline<float (int, double, int, float, float)>
+        trampoline <float (int, double, int, float, float)>
         t([&] (int p0, double p1, int p2, float p3, float p4) {return (p1 + p2 + p3 + p4 + p0);});
         auto p = t.get();
         float res = 5.2;
@@ -100,7 +100,7 @@ void stack_base_test() {
     
     {
         
-        trampoline<long long (int, int, int, int, int, int, int, int)>
+        trampoline <long long (int, int, int, int, int, int, int, int)>
         t([&] (int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7)
         {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p = t.get();
@@ -109,7 +109,7 @@ void stack_base_test() {
         std::cout << " int test completed"  << std::endl;
     }
     {
-        trampoline<long long (double, double, double, double, double, double, double, double)>
+        trampoline <long long (double, double, double, double, double, double, double, double)>
         t([&] (double p0, double p1, double p2, double p3, double p4, double p5, double p6, double p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p = t.get();
@@ -118,7 +118,7 @@ void stack_base_test() {
         std::cout << " double test completed"  << std::endl;
     }
     {
-        trampoline<long long (float, float, float, float, float, float, float, float)>
+        trampoline <long long (float, float, float, float, float, float, float, float)>
         t([&] (float p0, float p1, float p2, float p3, float p4, float p5, float p6, float p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p = t.get();
@@ -127,7 +127,7 @@ void stack_base_test() {
         std::cout << " float test completed"  << std::endl;
     }
     {
-        trampoline<long long (double, int, float, int, int, double, double, float)>
+        trampoline <long long (double, int, float, int, int, double, double, float)>
         t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p = t.get();
@@ -136,7 +136,7 @@ void stack_base_test() {
         std::cout << " int/double/float test completed"  << std::endl;
     }
     {
-        trampoline<long long (double&, int&, float&, int, int, double, double, float&)>
+        trampoline <long long (double&, int&, float&, int, int, double, double, float&)>
         t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p = t.get();
@@ -156,12 +156,12 @@ void stack_hard_test() {
     std::cout << "Test 4 started" << std::endl;
     
     {
-        trampoline<float (double, int, float, int, int, double, double, float)>
+        trampoline <float (double, int, float, int, int, double, double, float)>
         t0([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
           {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         auto p0 = t0.get();
         
-        trampoline<float (double, int, float, int, const int&, double&, double, float&)>
+        trampoline <float (double, int, float, int, const int&, double&, double, float&)>
         t1([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
            {return p1 + p2 + p3 + p4 + p0 + p5 + p6 + p7;});
         const int a = 1;
@@ -173,7 +173,7 @@ void stack_hard_test() {
         std::cout << " int/double/float test completed"  << std::endl;
     }
     {
-        trampoline<float (double, int, float, int, int, double, double, float)>
+        trampoline <float (double, int, float, int, int, double, double, float)>
         t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
            {return p2;});
         auto p = t.get();
@@ -182,7 +182,7 @@ void stack_hard_test() {
         std::cout<<" parms sequence test completed" << std::endl;
     }
     {
-        trampoline<int (double, int, float, int, int, double, double, float)>
+        trampoline <int (double, int, float, int, int, double, double, float)>
         t([&] (double p0, int p1, float p2, int p3, int p4, double p5, double p6, float p7)
            {return p7;});
         auto p = t.get();
@@ -223,16 +223,18 @@ void stack_hard_test() {
 void methods_test () {
     
     std::cout << "Test 5 started" << std::endl;
+    
     {
-        trampoline<int(int, int)> t0 = [&] (int p0, int p1) {return p0 + p1;};
+        trampoline <int(int, int)> t0 = [&] (int p0, int p1) {return p0 + p1;};
         assert (2 == t0.get()(1, 1));
         trampoline<int(int,int)> t1(std::move(t0));
         assert (2 == t1.get()(1, 1));
-        trampoline<int(int, int, int)> t2 = [&] (int p0, int p1, int p2) {return p0 + p1 + p2;};
-        assert(t2.get()(1, 1, 1) == t1.get()(1, 2));
+        trampoline <int(int, int)> t2 = [&] (int p0, int p1) {return p0 - p1;};
+        swap(t1,t2);
+        assert(t1.get()(1, 1) == 0);
+        assert(t2.get()(1, 1) == 2);
     }
 
-    
     std::cout << "Test 5 PASSED" << std::endl << std::endl;
 }
 
