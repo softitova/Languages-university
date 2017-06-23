@@ -126,7 +126,7 @@ public:
         {
             /*---------------- place arguments ----------------*/
             
-            /* 5 INTEGER args in r[9,8], rsi, rcx, rdx, 1 will be on stack later, <= 8 SSE args in xmm[0..7]\
+            /* 5 INTEGER args in r[9,8], rsi, rcx, rdx, 1 will be on stack later, <= 8 SSE args in xmm[0..7]
             stack_size - amount of arguments to place on stack */
             int stack_size = 8 * (args_t<Args ...>::INT_PTR - 5 + std::max(args_t<Args ...>::SSE - 8, 0));
             
@@ -164,8 +164,8 @@ public:
                 add(pcode,"\x48\x39\xe0\x74");
                 char* label_2 = pcode;
                 pcode++;
-                add(pcode, "\x48");
-                      
+//                add(pcode, "\x48");
+                
 
                 /*----------------- shifting argument -------------------*/
                 {
