@@ -32,6 +32,7 @@ void reg_base_test() {
 
 
 void reg_ptr_test() {
+    
     std::cout << "Test 1 started" << std::endl;
     
     std::function<char*(int *)> fun = [](int *){return std::make_shared<char>('a').get();};
@@ -203,7 +204,7 @@ void stack_hard_test() {
             .append(*c5)
             .append(*c6)
             .append(c7).append(*c8).append(c9).size();};
-        std::string sample = "abcababbaa";
+        std::string sample = "testfour";
         char const *sp = sample.c_str();
         std::vector<std::string> v;
         for(size_t i = 0; i < 9; i++) {
@@ -246,6 +247,7 @@ int main()
     stack_base_test();
     stack_hard_test();
     methods_test();
+    std::cout << std::endl << "All tests passed" << std::endl << std::endl;
     return 0;
 }
 

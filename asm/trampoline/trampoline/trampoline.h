@@ -97,9 +97,7 @@ private:
     };
     
     void add(char* &p, const char* command) {
-        for (const char *i = command; *i; i++) {
-            *(p++) = *i;
-        }
+        for (const char *i = command; *i; i++) *(p++) = *i;
     }
  
 public:
@@ -140,7 +138,7 @@ public:
             /*--------------- shifting arguments --------------*/
             {
                 /* rax on the top of the current stack
-                mov rax,rsp 
+                mov rax,rsp                                                         // 48 89 E0
                 rax on the bottom
                 add rax, stack_size */
                 add(pcode, "\x48\x89\xe0\x48\x05");
@@ -148,7 +146,7 @@ public:
                 pcode += 4;
                 
                 /* shift rsp (+8) to reti to kill it and provide arguments shifting
-                add rsp, 8 */
+                add rsp, 8  */
                 add(pcode,"\x48\x81\xc4");
                 *(int32_t*)pcode = 8;
                 pcode += 4;
@@ -170,11 +168,11 @@ public:
                 /*----------------- shifting argument -------------------*/
                 {
                     /* set rsp to arg we want to shift
-                    add rsp, 8
+                    add rsp, 8    48 81 C4
                     save arg we want to shift in rdi
-                    mov rdi, [rsp]
+                    mov rdi, [rsp]   48 8B 3C 24
                     shift arg by pusing saved in rdi argument onto free place on stack
-                    mov [rsp-0x8],rdi
+                    mov [rsp-0x8],rdi  48 89 7C 24 F8
                     cycle
                     jmp
                      */
@@ -190,9 +188,9 @@ public:
             /*----------- working with rsp, calling function ----------*/
             {
                 /* move saved in r11 return adress to rsp (onto the bottom of stack)
-                mov [rsp], r11
+                mov [rsp], r11                                                    // 4C 89 1C 24
                 transfer rsp to the top of stack
-                sub rsp, stack_size */
+                sub rsp, stack_size                                               //  48 81 EC */
                 add(pcode, "\x4c\x89\x1c\x24\x48\x81\xec");
                 *(int32_t*)pcode = stack_size;
                 pcode += 4;
@@ -208,14 +206,14 @@ public:
                 pcode += 8;
                 
                 /* calling function
-                call rax
+                call rax                                                           // FF D0
                 removing 6'th arg from stack, cause of calling conventions
-                pop r9
+                pop r9                                                             // 41 59
                 save into r11 adress of current rsp plus shift on curent stack size
                 have one less argument in stack cause of one arument have already been deleted from stack
-                mov r11,[rsp + stack_size]
+                mov r11,[rsp + stack_size]                                         // 4C 8B 9C 24
                 set corrrect value, previously stored in r11, to rsp
-                mov [rsp],r11
+                mov [rsp],r11                                                      // 4C 89 1C 24
                 return
                 ret */
                 add(pcode,"\xff\xd0\x41\x59\x4c\x8b\x9c\x24");
@@ -264,14 +262,15 @@ private:
         return  (*static_cast<F*>(obj))(std::forward<Args>(args)...);
     }
     
-    void* func_obj;
-    void* code;
-    void (*deleter)(void*);
-    
     template <typename F>
     static void my_deleter(void* func_obj) {
         delete static_cast<F*>(func_obj);
     }
+    
+    
+    void* func_obj;
+    void* code;
+    void (*deleter)(void*);
 };
 
 template<typename R, typename... Args>
