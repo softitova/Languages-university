@@ -1,3 +1,0 @@
-/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build/CMakeFiles/server_run.dir
-/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build/CMakeFiles/ALL_BUILD.dir
-/Users/macbook/Desktop/Languages-university/proxy_server_s/proxy_server_s/build/CMakeFiles/ZERO_CHECK.dir
