@@ -214,12 +214,12 @@ void methods_test () {
     
     {
         trampoline <int(int, int)> t0 = [&] (int p0, int p1) {return p0 + p1;};
-        t0.get()(NULL, NULL);
+//        t0.get()(NULL, NULL);
         assert (2 == t0.get()(1, 1));
         trampoline<int(int,int)> t1(std::move(t0));
         assert (2 == t1.get()(1, 1));
         trampoline <int(int, int)> t2 = [&] (int p0, int p1) {return p0 - p1;};
-        swap(t1,t2);
+        swap(t1, t2);
         assert(t1.get()(1, 1) == 0);
         assert(t2.get()(1, 1) == 2);
     }
